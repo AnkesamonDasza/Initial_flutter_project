@@ -1,54 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:theme_mode_handler/theme_mode_handler.dart';
+import './theme_mode_manager.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp( const MyApp() );
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
-  static final ValueNotifier<ThemeMode> themeNotifier = ValueNotifier(ThemeMode.dark);
-  const MyApp({Key? key}) : super(key: key);
-
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-        valueListenable: themeNotifier,
-        builder: (context, currentMode, child) {
-          return MaterialApp(
-            darkTheme: ThemeData.dark(),
-            themeMode: currentMode,
-            home: const MyHomePage(),
-          );
-        },
+    return ThemeModeHandler(
+      manager: ExampleThemeModeManager(),
+      placeholderWidget: const Center(
+        child: CircularProgressIndicator(),
+      ),
+      builder: (ThemeMode themeMode) {
+        return MaterialApp(
+          themeMode: themeMode,
+          darkTheme: ThemeData(
+            brightness: Brightness.dark,
+          ),
+          theme: ThemeData(
+            brightness: Brightness.light,
+          ),
+          home: const HomePage(),
+        );
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
+    final themeMode = ThemeModeHandler.of(context)?.themeMode;
+
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('APP_TITLE'),
+      appBar: AppBar(
+        title: const Text('APP_TITLE'),
           actions: [
-            IconButton(
-              icon: Icon(
-                  MyApp.themeNotifier.value == ThemeMode.light ? Icons.dark_mode : Icons.light_mode),
-              onPressed: () {
-                MyApp.themeNotifier.value =
-                MyApp.themeNotifier.value == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-              },
-            ),
-          ],
-        ),
-        body: const Center(child: Text("ADD APP HERE!")),
+          IconButton(
+            icon: Icon(themeMode == ThemeMode.light ? Icons.dark_mode : Icons.light_mode),
+            onPressed: () {
+               ThemeModeHandler.of(context)?.saveThemeMode(themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light);
+            },
+          ),
+        ],
+      ),
+      body: const Center(child: Text("ADD APP HERE!")),
     );
   }
 }
