@@ -31,9 +31,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final themeMode = ThemeModeHandler.of(context)?.themeMode;
@@ -45,8 +50,10 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: Icon(themeMode == ThemeMode.light ? Icons.dark_mode : Icons.light_mode),
             onPressed: () {
-              ThemeModeHandler.of(context)
-                  ?.saveThemeMode(themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light);
+              setState(() {
+                ThemeModeHandler.of(context)?.saveThemeMode(
+                    themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light);
+              });
             },
           ),
         ],
