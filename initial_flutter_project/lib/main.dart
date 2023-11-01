@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:initial_flutter_project/config.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
 import './theme_mode_manager.dart';
 
@@ -6,6 +7,7 @@ void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ThemeModeHandler(
@@ -38,17 +40,18 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('APP_TITLE'),
-          actions: [
+        title: const Text(MyConfig.appBarrTitle),
+        actions: [
           IconButton(
             icon: Icon(themeMode == ThemeMode.light ? Icons.dark_mode : Icons.light_mode),
             onPressed: () {
-               ThemeModeHandler.of(context)?.saveThemeMode(themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light);
+              ThemeModeHandler.of(context)
+                  ?.saveThemeMode(themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light);
             },
           ),
         ],
       ),
-      body: const Center(child: Text("ADD APP HERE!")),
+      body: MyConfig.appWidget,
     );
   }
 }
