@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:initial_flutter_project/config.dart';
 import 'package:theme_mode_handler/theme_mode_handler.dart';
+import './config.dart';
 import './theme_mode_manager.dart';
 
 void main() => runApp(const MyApp());
